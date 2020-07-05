@@ -1,0 +1,85 @@
+[gd_scene load_steps=11 format=2]
+
+[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://GUI/GUI.tscn" type="PackedScene" id=2]
+[ext_resource path="res://scripts/World.gd" type="Script" id=3]
+[ext_resource path="res://Fuel/Fuel.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Police/Police.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Coin/Coin.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Truck/Truck.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Oil/Oil.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Graficos/textGameOver.png" type="Texture" id=9]
+
+[sub_resource type="Animation" id=1]
+resource_name = "gameOver"
+tracks/0/type = "value"
+tracks/0/path = NodePath("Sprite:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.5 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector2( 240.572, -35.7993 ), Vector2( 240.572, 360 ) ]
+}
+
+[node name="World" type="Node"]
+script = ExtResource( 3 )
+Fuel = ExtResource( 4 )
+
+[node name="GUI" parent="." instance=ExtResource( 2 )]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+speed = 400
+
+[node name="Fuel" parent="." instance=ExtResource( 4 )]
+position = Vector2( -113.758, 104.451 )
+
+[node name="TimerPolice" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="TimerCoin" type="Timer" parent="."]
+wait_time = 1.7
+one_shot = true
+autostart = true
+
+[node name="Police" parent="." instance=ExtResource( 5 )]
+position = Vector2( -107.243, 45.7103 )
+
+[node name="Coin" parent="." instance=ExtResource( 6 )]
+position = Vector2( -107.243, -7.03235 )
+
+[node name="Truck" parent="." instance=ExtResource( 7 )]
+
+[node name="TimerTruck" type="Timer" parent="."]
+wait_time = 2.2
+one_shot = true
+autostart = true
+
+[node name="ScoreTimer" type="Timer" parent="."]
+
+[node name="Oil" parent="." instance=ExtResource( 8 )]
+
+[node name="TimerOil" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[node name="Muerte" type="Node2D" parent="."]
+visible = false
+
+[node name="Sprite" type="Sprite" parent="Muerte"]
+position = Vector2( 240.572, -35.7993 )
+texture = ExtResource( 9 )
+
+[node name="Anim" type="AnimationPlayer" parent="Muerte"]
+pause_mode = 2
+anims/gameOver = SubResource( 1 )
+[connection signal="timeout" from="TimerPolice" to="." method="_on_TimerPolice_timeout"]
+[connection signal="timeout" from="TimerCoin" to="." method="_on_TimerCoin_timeout"]
+[connection signal="timeout" from="TimerTruck" to="." method="_on_TimerTruck_timeout"]
+[connection signal="timeout" from="ScoreTimer" to="." method="_on_ScoreTimer_timeout"]
+[connection signal="timeout" from="TimerOil" to="." method="_on_TimerOil_timeout"]
